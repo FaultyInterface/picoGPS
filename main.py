@@ -27,18 +27,18 @@ gps_module = UART(1,
                   baudrate=9600,
                   tx=Pin(4),
                   rx=Pin(5))
-# SDspi = SPI(1,
-#            baudrate=30000000,
-#            polarity=0,
-#            phase=0,
-#            bits=8,
-#            firstbit=SPI.MSB,
-#            sck=Pin(10),
-#            mosi=Pin(11),
-#            miso=Pin(8))
-# sd = sdcard.SDCard(SDspi, cs=Pin(9, Pin.OUT))
-# vfs = uos.VfsFat(sd)
-# uos.mount(vfs, "/sd")
+SDspi = SPI(1,
+           baudrate=30000000,
+           polarity=0,
+           phase=0,
+           bits=8,
+           firstbit=SPI.MSB,
+           sck=Pin(10),
+           mosi=Pin(11),
+           miso=Pin(8))
+sd = sdcard.SDCard(SDspi, cs=Pin(9, Pin.OUT))
+vfs = uos.VfsFat(sd)
+uos.mount(vfs, "/sd")
 
 
 def convert(parts):
@@ -107,11 +107,11 @@ while True:
     except IndexError:
         TotalCount = ErrorCount + 1
         ErrorCount = TotalCount
-        # with open("/sd/ErrorCount.txt", "w") as file:
-        #    file.write(f"An error has occurred {ErrorCount} times. \r\n")
-        # with open("/sd/ErrorCount.txt", "r") as file:
-        #    CountReport = file.read()
-        #    print(CountReport)
+        with open("/sd/ErrorCount.txt", "w") as file:
+           file.write(f"An error has occurred {ErrorCount} times. \r\n")
+        with open("/sd/ErrorCount.txt", "r") as file:
+           CountReport = file.read()
+           print(CountReport)
         for x in range(5, -1, -1):
             display.draw_text(108, 320, f'An Error Occurred, Retrying in {x}', IBM, color565(255, 0, 0),
                               landscape=True)
